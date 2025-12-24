@@ -1,0 +1,578 @@
+Python 3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)] on win32
+Enter "help" below or click "Help" above for more information.
+>>> <!DOCTYPE html>
+... <html lang="vi">
+... <head>
+...   <meta charset="utf-8" />
+...   <title>Quản lý — Gia phả dòng họ Giàng</title>
+...   <meta name="viewport" content="width=device-width,initial-scale=1" />
+...   <style>
+...     :root{
+...       --primary:#0066cc; --accent:#004c99; --muted:#6b7280;
+...       --bg:#f6f9fc; --card:#fff;
+...     }
+...     *{box-sizing:border-box}
+...     body{font-family:Inter, "Segoe UI", Roboto, Arial; margin:0; background:var(--bg); color:#111}
+...     .wrap{max-width:1100px;margin:28px auto;padding:18px}
+...     .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(20,30,60,.06)}
+...     h1{margin:0 0 12px;font-size:20px}
+...     .grid{display:grid;grid-template-columns:1fr 420px;gap:16px}
+...     @media (max-width:920px){.grid{grid-template-columns:1fr}}
+...     label{display:block;font-size:13px;color:var(--muted);margin-top:8px}
+...     input[type="text"], input[type="number"], select, textarea{
+...       width:100%;padding:8px 10px;border-radius:8px;border:1px solid #e6eef9;background:#fbfdff;margin-top:6px;
+...       font-size:14px;
+...     }
+...     textarea{min-height:72px;resize:vertical}
+...     .row{display:flex;gap:8px;align-items:center;margin-top:10px}
+...     button{background:var(--primary);color:white;border:0;padding:8px 10px;border-radius:8px;cursor:pointer}
+...     button.ghost{background:#eef6ff;color:var(--primary);border:1px solid #cfe1fb}
+...     button.warn{background:#ff5c5c}
+...     .controls{display:flex;gap:8px;flex-wrap:wrap}
+...     .list{margin-top:12px;max-height:520px;overflow:auto;padding-right:6px}
+...     .member{padding:10px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+    .meta{color:var(--muted);font-size:13px;margin-top:6px}
+    .actions button{margin-left:6px;padding:6px 8px;font-size:13px;border-radius:8px}
+    .actions button.ghost{background:#f3f6fb;color:#0366d6;border:1px solid #d7e9ff}
+    .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+    .small{font-size:13px;padding:6px 8px;border-radius:8px}
+    .tree{margin-top:12px;border-top:1px dashed #eef2f7;padding-top:12px}
+    .tree ul{padding-left:18px;margin:6px 0}
+    .search{padding:8px;border-radius:8px;border:1px solid #e6eef9;background:#fff;flex:1}
+    .note{color:var(--muted);font-size:13px;margin-top:6px}
+    .error{color:#b00020;font-size:13px;margin-top:6px}
+    .badge{background:#eef6ff;color:var(--primary);padding:4px 8px;border-radius:999px;font-size:12px}
+    footer{margin-top:12px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>📜 Gia phả dòng họ Giàng</h1>
+      <div class="grid">
+        <!-- Left: Form + List -->
+        <div>
+          <h3 id="formTitle">Thêm thành viên mới</h3>
+          <div id="formError" class="error" style="display:none"></div>
+
+          <input type="hidden" id="memberId">
+
+          <label>Họ và tên *</label>
+          <input id="hoTen" type="text" placeholder="Ví dụ: Nguyễn Văn A" />
+
+          <label>Đời thứ *</label>
+          <input id="doiThu" type="number" min="1" placeholder="Ví dụ: 3" />
+
+          <label>Cha (liên kết)</label>
+          <select id="fatherSelect"><option value="">— Chọn cha (nếu là thành viên khác) —</option></select>
+
+          <label>Mẹ (liên kết)</label>
+          <select id="motherSelect"><option value="">— Chọn mẹ (nếu là thành viên khác) —</option></select>
+
+          <label>Ngày Tháng Năm sinh</label>
+          <input id="ngaysinh" type="number" placeholder="ngày sinh (ví dụ:01)"/>
+          <input id="thánginh" type="number" placeholder="tháng sinh (ví dụ: 01)"/>
+          <input id="namsinh" type="number" placeholder="năm sinh (ví dụ:1945)" />
+
+          <label>Ngày Tháng Năm mất</label>
+          <input id="ngaymat" type="number" placeholder="ngày mất (nếu có)"/>
+          <input id="thangmat" type="nuber" placeholder="tháng mất (nếu có)"/>
+          <input id="nammat" type="number" placeholder="năm mất (nếu có)" />
+
+          <label>Công việc</label>
+          <textarea id="congviec"placeholder="Công việc..."></textarea>
+          <label>Ghi chú</label>
+          <textarea id="ghiChu" placeholder="Ghi chú thêm..."></textarea>
+
+          <div class="row">
+            <button id="saveBtn">💾 Lưu</button>
+            <button id="resetBtn" class="ghost">Làm mới</button>
+            <button id="clearAllBtn" class="ghost" title="Xóa toàn bộ dữ liệu (không thể hoàn tác)">Xóa toàn bộ</button>
+            <div style="margin-left:auto" id="statusBadge" class="badge" style="display:none"></div>
+          </div>
+
+          <hr />
+
+          <div class="toolbar">
+            <input id="searchInput" class="search" placeholder="Tìm theo tên, năm, hoặc ghi chú..." />
+            <select id="filterGeneration" class="small">
+              <option value="">Tất cả đời</option>
+            </select>
+            <select id="sortSelect" class="small">
+              <option value="name">Sắp xếp: Tên (A→Z)</option>
+              <option value="doi-asc">Đời (tăng dần)</option>
+              <option value="doi-desc">Đời (giảm dần)</option>
+              <option value="born-asc">Năm sinh (tăng dần)</option>
+              <option value="born-desc">Năm sinh (giảm dần)</option>
+            </select>
+            <button id="exportBtn" class="small ghost">Xuất JSON</button>
+            <label for="importFile" class="small ghost" style="cursor:pointer;margin:0">Nhập JSON</label>
+            <input id="importFile" type="file" accept="application/json" style="display:none" />
+          </div>
+
+          <div class="list" id="danhSach"></div>
+        </div>
+
+        <!-- Right: Tree / Preview -->
+        <div>
+          <h3>Cây quan hệ</h3>
+          <div class="note">Mặc định hiển thị toàn bộ. Chọn một thành viên trong danh sách để căn giữa trong cây.</div>
+          <div id="treeWrap" class="tree card" style="padding:12px;margin-top:8px;max-height:640px;overflow:auto"></div>
+
+          <h3 style="margin-top:12px">Hướng dẫn ngắn</h3>
+          <div class="note">
+            - Mỗi thành viên có ID duy nhất; bạn có thể Sửa, Xóa.<br>
+            - Cha/Mẹ có thể liên kết tới thành viên khác (dropdown). Nếu cha/mẹ không có trong danh sách, bỏ trống và ghi tên trong ghi chú.<br>
+            - Dữ liệu lưu trong localStorage; dùng "Xuất JSON" để sao lưu và "Nhập JSON" để phục hồi/chia sẻ.<br>
+            - "Xóa toàn bộ" sẽ xóa dữ liệu cục bộ (hệ thống sẽ hỏi xác nhận).
+          </div>
+        </div>
+      </div>
+
+      <footer>Phiên bản local • Dữ liệu: localStorage • Tạo bởi trợ lý</footer>
+    </div>
+  </div>
+
+  <script>
+    // Giữ dữ liệu trong localStorage key
+    const STORAGE_KEY = "giapha_v2";
+    // Giữ danh sách vào biến
+    let members = [];
+
+    // Helper: tạo id an toàn
+    function genId() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return Date.now().toString(36) + Math.random().toString(36).slice(2,9);
+    }
+
+    // Lấy element
+    const el = id => document.getElementById(id);
+
+    // Load / Save
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        members = raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        console.error("Không thể đọc dữ liệu:", e);
+        members = [];
+      }
+    }
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
+      flashStatus("Đã lưu");
+    }
+
+    // Flash status nhỏ
+    let statusTimer = null;
+    function flashStatus(text="Đã lưu", ms=1200) {
+      const b = el("statusBadge");
+      b.style.display = "inline-block";
+      b.textContent = text;
+      if (statusTimer) clearTimeout(statusTimer);
+      statusTimer = setTimeout(()=> b.style.display="none", ms);
+    }
+
+    // Validation đơn giản
+    function validateForm(data) {
+      const errs = [];
+      if (!data.hoTen || !data.hoTen.trim()) errs.push("Họ và tên là bắt buộc.");
+      if (!data.doiThu || isNaN(+data.doiThu) || +data.doiThu < 1) errs.push("Đời thứ phải là số nguyên >= 1.");
+      if (data.namSinh && (isNaN(+data.namSinh) || +data.namSinh < 1000 || +data.namSinh > 9999)) errs.push("Năm sinh không hợp lệ.");
+      if (data.namMat && (isNaN(+data.namMat) || +data.namMat < 1000 || +data.namMat > 9999)) errs.push("Năm mất không hợp lệ.");
+      // Không cho tự làm cha/mẹ của chính mình
+      if (data.id && (data.fatherId === data.id || data.motherId === data.id)) errs.push("Không thể đặt chính mình làm cha hoặc mẹ.");
+      return errs;
+    }
+
+    // Ghi form -> object
+    function getFormData() {
+      return {
+        id: el("memberId").value || null,
+        hoTen: el("hoTen").value.trim(),
+        doiThu: el("doiThu").value ? +el("doiThu").value : null,
+        fatherId: el("fatherSelect").value || null,
+        motherId: el("motherSelect").value || null,
+        namSinh: el("namSinh").value ? +el("namSinh").value : null,
+        namMat: el("namMat").value ? +el("namMat").value : null,
+        ghiChu: el("ghiChu").value.trim() || ""
+      };
+    }
+
+    // Gán form từ object
+    function setFormData(m) {
+      el("memberId").value = m.id || "";
+      el("hoTen").value = m.hoTen || "";
+      el("doiThu").value = m.doiThu || "";
+      el("fatherSelect").value = m.fatherId || "";
+      el("motherSelect").value = m.motherId || "";
+      el("namSinh").value = m.namSinh || "";
+      el("namMat").value = m.namMat || "";
+      el("ghiChu").value = m.ghiChu || "";
+      el("formTitle").textContent = m.id ? "Chỉnh sửa thành viên" : "Thêm thành viên mới";
+    }
+
+    // Clear form
+    function clearForm() {
+      setFormData({}); // reset
+      el("formError").style.display = "none";
+      el("formError").textContent = "";
+    }
+
+    // Add or update
+    function saveMember() {
+      const data = getFormData();
+      const errs = validateForm(data);
+      if (errs.length) {
+        el("formError").style.display = "block";
+        el("formError").textContent = errs.join(" ");
+        return;
+      }
+      el("formError").style.display = "none";
+
+      if (data.id) {
+        // cập nhật
+        const idx = members.findIndex(m => m.id === data.id);
+        if (idx === -1) {
+          alert("Không tìm thấy thành viên để cập nhật.");
+          return;
+        }
+        // preserve createdAt
+        data.updatedAt = new Date().toISOString();
+        data.createdAt = members[idx].createdAt || data.createdAt || new Date().toISOString();
+        members[idx] = data;
+      } else {
+        // thêm mới
+        data.id = genId();
+        data.createdAt = new Date().toISOString();
+        data.updatedAt = data.createdAt;
+        members.push(data);
+      }
+      saveData();
+      renderAll();
+      clearForm();
+    }
+
+    // Delete
+    function deleteMember(id) {
+      if (!confirm("Bạn chắc chắn muốn xóa thành viên này? Hành động không thể hoàn tác.")) return;
+      // Khi xóa, ta sẽ giữ các bản con (children) nhưng bỏ liên kết cha/mẹ nếu trỏ tới id này
+      members = members.filter(m => m.id !== id);
+      members.forEach(m => {
+        if (m.fatherId === id) m.fatherId = null;
+        if (m.motherId === id) m.motherId = null;
+      });
+      saveData();
+      renderAll();
+    }
+
+    // Edit: load member vào form
+    function editMember(id) {
+      const m = members.find(x => x.id === id);
+      if (!m) return;
+      setFormData(m);
+      // scroll up to form
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    // Populate parent selects
+    function populateParentSelects() {
+      const father = el("fatherSelect"), mother = el("motherSelect");
+      const prevFather = father.value;
+      const prevMother = mother.value;
+      father.innerHTML = '<option value="">— Chọn cha (nếu là thành viên khác) —</option>';
+      mother.innerHTML = '<option value="">— Chọn mẹ (nếu là thành viên khác) —</option>';
+      const sorted = [...members].sort((a,b)=> a.hoTen.localeCompare(b.hoTen));
+      sorted.forEach(m => {
+        const opt1 = document.createElement("option");
+        opt1.value = m.id; opt1.textContent = `${m.hoTen}${m.namSinh ? " ("+m.namSinh+")": ""}`;
+        father.appendChild(opt1);
+        const opt2 = opt1.cloneNode(true);
+        mother.appendChild(opt2);
+      });
+      // restore selection where possible
+      if (sorted.some(s=>s.id===prevFather)) father.value = prevFather;
+      if (sorted.some(s=>s.id===prevMother)) mother.value = prevMother;
+    }
+
+    // Render danh sách theo filter/search/sort
+    function renderList() {
+      const container = el("danhSach");
+      container.innerHTML = "";
+      let results = [...members];
+
+      // filter generation
+      const genFilter = el("filterGeneration").value;
+      if (genFilter) results = results.filter(r => String(r.doiThu) === genFilter);
+
+      // search
+      const q = el("searchInput").value.trim().toLowerCase();
+      if (q) {
+        results = results.filter(m => {
+          return (m.hoTen && m.hoTen.toLowerCase().includes(q)) ||
+                 (m.ghiChu && m.ghiChu.toLowerCase().includes(q)) ||
+                 (m.namSinh && String(m.namSinh).includes(q)) ||
+                 (m.namMat && String(m.namMat).includes(q));
+        });
+      }
+
+      // sort
+      const sort = el("sortSelect").value;
+      results.sort((a,b)=> {
+        if (sort === "name") return a.hoTen.localeCompare(b.hoTen);
+        if (sort === "doi-asc") return (+a.doiThu||0) - (+b.doiThu||0);
+        if (sort === "doi-desc") return (+b.doiThu||0) - (+a.doiThu||0);
+        if (sort === "born-asc") return (+a.namSinh||9999) - (+b.namSinh||9999);
+        if (sort === "born-desc") return (+b.namSinh||9999) - (+a.namSinh||9999);
+        return 0;
+      });
+
+      if (!results.length) {
+        container.innerHTML = '<div class="note">Chưa có thành viên phù hợp.</div>';
+        return;
+      }
+
+      results.forEach(m => {
+        const div = document.createElement("div");
+        div.className = "member";
+        const left = document.createElement("div");
+        const title = document.createElement("div");
+        title.innerHTML = `<b>${m.hoTen}</b> <span class="meta"> (Đời ${m.doiThu || "?"})</span>`;
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        let details = "";
+        details += m.fatherId ? `Cha: ${getNameById(m.fatherId)} • ` : "";
+        details += m.motherId ? `Mẹ: ${getNameById(m.motherId)} • ` : "";
+        if (m.namSinh) details += `Sinh: ${m.namSinh} `;
+        if (m.namMat) details += `- Mất: ${m.namMat} `;
+        if (m.ghiChu) details += `<div style="margin-top:6px"><i>${m.ghiChu}</i></div>`;
+        meta.innerHTML = details;
+        left.appendChild(title);
+        left.appendChild(meta);
+
+        const right = document.createElement("div");
+        right.className = "actions";
+        // Edit
+        const btnEdit = document.createElement("button");
+        btnEdit.className = "ghost";
+        btnEdit.textContent = "Sửa";
+        btnEdit.onclick = ()=> editMember(m.id);
+        // Center in tree
+        const btnCenter = document.createElement("button");
+        btnCenter.className = "ghost";
+        btnCenter.textContent = "Tô sáng";
+        btnCenter.onclick = ()=> renderTree(m.id);
+        // Delete
+        const btnDel = document.createElement("button");
+        btnDel.className = "warn";
+        btnDel.textContent = "Xóa";
+        btnDel.onclick = ()=> deleteMember(m.id);
+
+        right.appendChild(btnEdit);
+        right.appendChild(btnCenter);
+        right.appendChild(btnDel);
+
+        div.appendChild(left);
+        div.appendChild(right);
+        container.appendChild(div);
+      });
+    }
+
+    function getNameById(id) {
+      const m = members.find(x=>x.id===id);
+      return m ? m.hoTen : "(không tồn tại)";
+    }
+
+    // Build tree: nhóm theo cha/mẹ (tạo map children)
+    function buildTreeRoots() {
+      // Create id->node map
+      const map = new Map();
+      members.forEach(m => map.set(m.id, {...m, children: []}));
+      // For each member, if has fatherId or motherId, attach as child to those parents.
+      // We'll prefer father linking for tree root decisions; nodes with no parent become roots.
+      map.forEach(node=>{
+        if (node.fatherId && map.has(node.fatherId)) {
+          map.get(node.fatherId).children.push(node);
+        } else if (node.motherId && map.has(node.motherId)) {
+          map.get(node.motherId).children.push(node);
+        }
+      });
+      // roots: those not attached as child to any other node
+      const attached = new Set();
+      map.forEach(node=>{
+        node.children.forEach(c => attached.add(c.id));
+      });
+      const roots = [];
+      map.forEach(node=>{
+        if (!attached.has(node.id)) roots.push(node);
+      });
+      // if no roots (cycle or all linked), fallback to all nodes sorted by generation
+      if (!roots.length) {
+        const arr = [...map.values()].sort((a,b)=> (a.doiThu||0)-(b.doiThu||0));
+        return arr;
+      }
+      // sort roots by doiThu then name
+      roots.sort((a,b)=> (a.doiThu||0)-(b.doiThu||0) || a.hoTen.localeCompare(b.hoTen));
+      return roots;
+    }
+
+    // Render tree: optional focusId to highlight
+    function renderTree(focusId=null) {
+      const wrap = el("treeWrap");
+      wrap.innerHTML = "";
+      if (!members.length) {
+        wrap.innerHTML = '<div class="note">Chưa có dữ liệu để hiển thị cây.</div>';
+        return;
+      }
+      const roots = buildTreeRoots();
+      // Recursive render
+      function makeNodeHTML(node, depth=0) {
+        const li = document.createElement("li");
+        li.style.marginBottom = "6px";
+        const title = document.createElement("div");
+        title.innerHTML = `<b>${node.hoTen}</b> <span class="meta"> (Đời ${node.doiThu||"?"}${node.namSinh? ", " + node.namSinh:""})</span>`;
+        if (node.id === focusId) title.style.background = "#fff9db";
+        title.style.padding = "6px"; title.style.borderRadius = "8px";
+        li.appendChild(title);
+        if (node.ghiChu) {
+          const note = document.createElement("div");
+          note.className = "meta";
+          note.style.marginTop = "6px";
+          note.innerHTML = `<i>${node.ghiChu}</i>`;
+          li.appendChild(note);
+        }
+        if (node.children && node.children.length) {
+          const ul = document.createElement("ul");
+          node.children.sort((a,b)=> (a.doiThu||0)-(b.doiThu||0) || a.hoTen.localeCompare(b.hoTen));
+          node.children.forEach(child => ul.appendChild(makeNodeHTML(child, depth+1)));
+          li.appendChild(ul);
+        }
+        return li;
+      }
+      // Attach to wrap
+      const outer = document.createElement("div");
+      roots.forEach(r => {
+        const ul = document.createElement("ul");
+        ul.appendChild(makeNodeHTML(r));
+        outer.appendChild(ul);
+      });
+      wrap.appendChild(outer);
+      // Try to scroll to focused element highlight
+      if (focusId) {
+        const highlighted = wrap.querySelector("div[style*='background: #fff9db']");
+        if (highlighted) highlighted.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+
+    // Populate generation filter options
+    function populateGenerationFilter() {
+      const select = el("filterGeneration");
+      const gens = Array.from(new Set(members.map(m => m.doiThu).filter(Boolean))).sort((a,b)=>a-b);
+      select.innerHTML = '<option value="">Tất cả đời</option>';
+      gens.forEach(g => {
+        const o = document.createElement("option");
+        o.value = g; o.textContent = "Đời " + g;
+        select.appendChild(o);
+      });
+    }
+
+    // Export JSON (download)
+    function exportJSON() {
+      const dataStr = JSON.stringify({ exportedAt: new Date().toISOString(), members }, null, 2);
+      const blob = new Blob([dataStr], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `giapha_export_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Import JSON (file)
+    function importJSONFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          let incoming = null;
+          if (Array.isArray(parsed)) incoming = parsed;
+          else if (parsed.members && Array.isArray(parsed.members)) incoming = parsed.members;
+          else {
+            // maybe old format saved as object with id-indexed
+            throw new Error("Định dạng JSON không hợp lệ. Cần mảng các thành viên hoặc {members: [...]}.");
+          }
+          // Confirm: merge or replace
+          if (!confirm("Nhập dữ liệu sẽ GỘP vào dữ liệu hiện tại. Chọn Hủy để thay thế toàn bộ. Tiếp tục?")) {
+            // replace
+            members = incoming;
+          } else {
+            // merge: add those with new ids, override if same id? We'll skip duplicates by id
+            const existingIds = new Set(members.map(m=>m.id));
+            incoming.forEach(m=>{
+              if (!m.id) m.id = genId();
+              if (!existingIds.has(m.id)) members.push(m);
+            });
+          }
+          saveData();
+          renderAll();
+          alert("Nhập dữ liệu hoàn tất.");
+        } catch (err) {
+          alert("Lỗi khi đọc file: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Clear all data
+    function clearAll() {
+      if (!confirm("Bạn chắc chắn muốn xóa toàn bộ dữ liệu trong localStorage? Hành động không thể hoàn tác.")) return;
+      members = [];
+      saveData();
+      renderAll();
+    }
+
+    // Render everything
+    function renderAll(focusId=null) {
+      populateParentSelects();
+      populateGenerationFilter();
+      renderList();
+      renderTree(focusId);
+    }
+
+    // Events
+    el("saveBtn").addEventListener("click", ()=> saveMember());
+    el("resetBtn").addEventListener("click", ()=> clearForm());
+    el("clearAllBtn").addEventListener("click", ()=> clearAll());
+    el("exportBtn").addEventListener("click", ()=> exportJSON());
+    el("importFile").addEventListener("change", (ev)=> {
+      const file = ev.target.files[0];
+      importJSONFile(file);
+      ev.target.value = "";
+    });
+
+    el("searchInput").addEventListener("input", ()=> renderList());
+    el("filterGeneration").addEventListener("change", ()=> renderList());
+    el("sortSelect").addEventListener("change", ()=> renderList());
+
+    // Keyboard: Enter to save when focus in form (except textarea)
+    Array.from(document.querySelectorAll("input")).forEach(inp => {
+      inp.addEventListener("keydown", (e)=> {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          saveMember();
+        }
+      });
+    });
+
+    // Init
+    loadData();
+    renderAll();
+
+    // Public helpers to be used in inline events (if any)
+    window.editMember = editMember;
+    window.deleteMember = deleteMember;
+    window.renderTree = renderTree;
+    window.getNameById = getNameById;
+  </script>
+</body>

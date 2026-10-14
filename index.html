@@ -1,10 +1,10 @@
-Python 3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)] on win32
+
 Enter "help" below or click "Help" above for more information.
 >>> <!DOCTYPE html>
 ... <html lang="vi">
 ... <head>
 ...   <meta charset="utf-8" />
-...   <title>Quản lý — Gia phả dòng họ Giàng</title>
+...   <title>Quản lý — GIA PHẠ HỌ GIÀNG</title>
 ...   <meta name="viewport" content="width=device-width,initial-scale=1" />
 ...   <style>
 ...     :root{
@@ -48,7 +48,7 @@ Enter "help" below or click "Help" above for more information.
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>📜 Gia phả dòng họ Giàng</h1>
+      <h1>📜 GIA PHẠ HỌ GIÀNG</h1>
       <div class="grid">
         <!-- Left: Form + List -->
         <div>
@@ -71,7 +71,7 @@ Enter "help" below or click "Help" above for more information.
 
           <label>Ngày Tháng Năm sinh</label>
           <input id="ngaysinh" type="number" placeholder="ngày sinh (ví dụ:01)"/>
-          <input id="thánginh" type="number" placeholder="tháng sinh (ví dụ: 01)"/>
+          <input id="thangsinh" type="number" placeholder="tháng sinh (ví dụ: 01)"/>
           <input id="namsinh" type="number" placeholder="năm sinh (ví dụ:1945)" />
 
           <label>Ngày Tháng Năm mất</label>
@@ -105,8 +105,8 @@ Enter "help" below or click "Help" above for more information.
               <option value="born-asc">Năm sinh (tăng dần)</option>
               <option value="born-desc">Năm sinh (giảm dần)</option>
             </select>
-            <button id="exportBtn" class="small ghost">Xuất JSON</button>
-            <label for="importFile" class="small ghost" style="cursor:pointer;margin:0">Nhập JSON</label>
+            <button id="exportBtn" class="small ghost">Xuất dữ liệu</button>
+            <label for="importFile" class="small ghost" style="cursor:pointer;margin:0">Nhập dữ liệu</label>
             <input id="importFile" type="file" accept="application/json" style="display:none" />
           </div>
 
@@ -123,13 +123,13 @@ Enter "help" below or click "Help" above for more information.
           <div class="note">
             - Mỗi thành viên có ID duy nhất; bạn có thể Sửa, Xóa.<br>
             - Cha/Mẹ có thể liên kết tới thành viên khác (dropdown). Nếu cha/mẹ không có trong danh sách, bỏ trống và ghi tên trong ghi chú.<br>
-            - Dữ liệu lưu trong localStorage; dùng "Xuất JSON" để sao lưu và "Nhập JSON" để phục hồi/chia sẻ.<br>
+            - Dữ liệu lưu trong localStorage; dùng "Xuất dữ liệu" để sao lưu và "Nhập dữ liệu" để phục hồi/chia sẻ.<br>
             - "Xóa toàn bộ" sẽ xóa dữ liệu cục bộ (hệ thống sẽ hỏi xác nhận).
           </div>
         </div>
       </div>
 
-      <footer>Phiên bản local • Dữ liệu: localStorage • Tạo bởi trợ lý</footer>
+      <footer>Tạo bởi Giàng A Pao</footer>
     </div>
   </div>
 

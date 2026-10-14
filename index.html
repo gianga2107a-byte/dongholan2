@@ -128,7 +128,7 @@
         </div>
       </div>
 
-      <footer>Tạo bởi Giàng A Pao</footer>
+      <footer> Tạo bởi Giàng A Pao </footer>
     </div>
   </div>
 
@@ -185,32 +185,60 @@
     }
 
     // Ghi form -> object
-    function getFormData() {
-      return {
-        id: el("memberId").value || null,
-        hoTen: el("hoTen").value.trim(),
-        doiThu: el("doiThu").value ? +el("doiThu").value : null,
-        fatherId: el("fatherSelect").value || null,
-        motherId: el("motherSelect").value || null,
-        namSinh: el("namSinh").value ? +el("namSinh").value : null,
-        namMat: el("namMat").value ? +el("namMat").value : null,
-        ghiChu: el("ghiChu").value.trim() || ""
+    
+function getFormData() {
+  return {
+    id: el("memberId").value || null,
+    hoTen: el("hoTen").value.trim(),
+    doiThu: el("doiThu").value
+      ? Number(el("doiThu").value)
+      : null,
+
+    fatherId: el("fatherSelect").value || null,
+    motherId: el("motherSelect").value || null,
+
+    ngaySinh: el("ngaysinh").value
+      ? Number(el("ngaysinh").value) : null,
+    thangSinh: el("thangsinh").value
+      ? Number(el("thangsinh").value) : null,
+    namSinh: el("namsinh").value
+      ? Number(el("namsinh").value) : null,
+
+    ngayMat: el("ngaymat").value
+      ? Number(el("ngaymat").value) : null,
+    thangMat: el("thangmat").value
+      ? Number(el("thangmat").value) : null,
+    namMat: el("nammat").value
+      ? Number(el("nammat").value) : null,
+      
+    congviec: el("congviec").value.trim(),
+    ghiChu: el("ghiChu").value.trim()
       };
     }
 
-    // Gán form từ object
-    function setFormData(m) {
-      el("memberId").value = m.id || "";
-      el("hoTen").value = m.hoTen || "";
-      el("doiThu").value = m.doiThu || "";
-      el("fatherSelect").value = m.fatherId || "";
-      el("motherSelect").value = m.motherId || "";
-      el("namSinh").value = m.namSinh || "";
-      el("namMat").value = m.namMat || "";
-      el("ghiChu").value = m.ghiChu || "";
-      el("formTitle").textContent = m.id ? "Chỉnh sửa thành viên" : "Thêm thành viên mới";
-    }
+    // Gán form từ object   
+function setFormData(m = {}) {
+  el("memberId").value = m.id || "";
+  el("hoTen").value = m.hoTen || "";
+  el("doiThu").value = m.doiThu ?? "";
 
+  el("fatherSelect").value = m.fatherId || "";
+  el("motherSelect").value = m.motherId || "";
+
+  el("ngaysinh").value = m.ngaySinh ?? "";
+  el("thangsinh").value = m.thangSinh ?? "";
+  el("namsinh").value = m.namSinh ?? "";
+
+  el("ngaymat").value = m.ngayMat ?? "";
+  el("thangmat").value = m.thangMat ?? "";
+  el("nammat").value = m.namMat ?? "";
+
+  el("congviec").value = m.congviec || "";
+  el("ghiChu").value = m.ghiChu || "";
+
+  el("formTitle").textContent =
+    m.id ? "Chỉnh sửa thành viên" : "Thêm thành viên mới";
+}
     // Clear form
     function clearForm() {
       setFormData({}); // reset

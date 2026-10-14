@@ -1,604 +1,1299 @@
+
 <!DOCTYPE html>
-... <html lang="vi">
-... <head>
-...   <meta charset="utf-8" />
-...   <title>Quản lý — GIA PHẠ HỌ GIÀNG</title>
-...   <meta name="viewport" content="width=device-width,initial-scale=1" />
-...   <style>
-...     :root{
-...       --primary:#0066cc; --accent:#004c99; --muted:#6b7280;
-...       --bg:#f6f9fc; --card:#fff;
-...     }
-...     *{box-sizing:border-box}
-...     body{font-family:Inter, "Segoe UI", Roboto, Arial; margin:0; background:var(--bg); color:#111}
-...     .wrap{max-width:1100px;margin:28px auto;padding:18px}
-...     .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(20,30,60,.06)}
-...     h1{margin:0 0 12px;font-size:20px}
-...     .grid{display:grid;grid-template-columns:1fr 420px;gap:16px}
-...     @media (max-width:920px){.grid{grid-template-columns:1fr}}
-...     label{display:block;font-size:13px;color:var(--muted);margin-top:8px}
-...     input[type="text"], input[type="number"], select, textarea{
-...       width:100%;padding:8px 10px;border-radius:8px;border:1px solid #e6eef9;background:#fbfdff;margin-top:6px;
-...       font-size:14px;
-...     }
-...     textarea{min-height:72px;resize:vertical}
-...     .row{display:flex;gap:8px;align-items:center;margin-top:10px}
-...     button{background:var(--primary);color:white;border:0;padding:8px 10px;border-radius:8px;cursor:pointer}
-...     button.ghost{background:#eef6ff;color:var(--primary);border:1px solid #cfe1fb}
-...     button.warn{background:#ff5c5c}
-...     .controls{display:flex;gap:8px;flex-wrap:wrap}
-...     .list{margin-top:12px;max-height:520px;overflow:auto;padding-right:6px}
-...     .member{padding:10px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-    .meta{color:var(--muted);font-size:13px;margin-top:6px}
-    .actions button{margin-left:6px;padding:6px 8px;font-size:13px;border-radius:8px}
-    .actions button.ghost{background:#f3f6fb;color:#0366d6;border:1px solid #d7e9ff}
-    .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
-    .small{font-size:13px;padding:6px 8px;border-radius:8px}
-    .tree{margin-top:12px;border-top:1px dashed #eef2f7;padding-top:12px}
-    .tree ul{padding-left:18px;margin:6px 0}
-    .search{padding:8px;border-radius:8px;border:1px solid #e6eef9;background:#fff;flex:1}
-    .note{color:var(--muted);font-size:13px;margin-top:6px}
-    .error{color:#b00020;font-size:13px;margin-top:6px}
-    .badge{background:#eef6ff;color:var(--primary);padding:4px 8px;border-radius:999px;font-size:12px}
-    footer{margin-top:12px;color:var(--muted);font-size:13px}
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GIA PHẠ HỌ GIÀNG</title>
+
+  <style>
+    :root {
+      --primary: #0066cc;
+      --accent: #004c99;
+      --muted: #6b7280;
+      --bg: #f6f9fc;
+      --card: #fff;
+      --border: #e3eaf3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: #172033;
+    }
+
+    .wrap {
+      max-width: 1250px;
+      margin: 24px auto;
+      padding: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(20, 30, 60, .06);
+    }
+
+    h1 { margin: 0 0 18px; font-size: 24px; }
+    h2 { font-size: 20px; margin: 0 0 14px; }
+    h3 { font-size: 17px; margin: 18px 0 8px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(300px, 410px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 11px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fbfdff;
+      font: inherit;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    .pair-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .relationship {
+      padding: 12px;
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fafcff;
+    }
+
+    .relationship strong {
+      font-size: 14px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 5px;
+    }
+
+    .row, .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    button {
+      border: 0;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: var(--primary);
+      color: white;
+      font-size: 13px;
+    }
+
+    button:hover { filter: brightness(.95); }
+
+    button.ghost {
+      color: var(--primary);
+      background: #eef6ff;
+      border: 1px solid #cfe1fb;
+    }
+
+    button.warn { background: #d9363e; }
+
+    button.small {
+      padding: 6px 9px;
+      font-size: 12px;
+    }
+
+    .error {
+      color: #b00020;
+      background: #fff1f1;
+      padding: 9px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .badge {
+      display: none;
+      color: #075985;
+      background: #e0f2fe;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .tree {
+      overflow: auto;
+      max-height: 78vh;
+      min-height: 220px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fcfdff;
+    }
+
+    .tree ul {
+      list-style: none;
+      padding-left: 28px;
+      margin: 16px 0 0;
+      border-left: 1px solid #cbd5e1;
+    }
+
+    .tree > ul {
+      padding-left: 0;
+      border-left: 0;
+      margin-top: 0;
+    }
+
+    .family-unit {
+      position: relative;
+      margin: 0 0 12px;
+      padding-left: 10px;
+    }
+
+    .family-unit::before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: 20px;
+      width: 10px;
+      border-top: 1px solid #cbd5e1;
+    }
+
+    .tree > ul > .family-unit::before { display: none; }
+
+    .couple {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .person {
+      min-width: 190px;
+      max-width: 300px;
+      border: 1px solid #dbe5f1;
+      border-radius: 10px;
+      padding: 10px;
+      background: white;
+      box-shadow: 0 2px 5px rgba(20, 30, 60, .04);
+    }
+
+    .person.highlight {
+      background: #fff9db;
+      border: 2px solid #eab308;
+    }
+
+    .person-name {
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .person-meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .person-note {
+      font-size: 12px;
+      margin-top: 7px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .person-actions {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 9px;
+    }
+
+    .children-label {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 10px 0 0 8px;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 20px 4px;
+    }
+
+    .toolbar input[type="text"] {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="card">
       <h1>📜 GIA PHẠ HỌ GIÀNG</h1>
+
       <div class="grid">
-        <!-- Left: Form + List -->
-        <div>
-          <h3 id="formTitle">Thêm thành viên mới</h3>
-          <div id="formError" class="error" style="display:none"></div>
+        <!-- KHU VỰC NHẬP VÀ CHỈNH SỬA -->
+        <section>
+          <h2 id="formTitle">Thêm thành viên mới</h2>
+
+          <div id="formError" class="error" hidden></div>
 
           <input type="hidden" id="memberId">
 
-          <label>Họ và tên *</label>
-          <input id="hoTen" type="text" placeholder="Ví dụ: Nguyễn Văn A" />
+          <label for="hoTen">Họ và tên *</label>
+          <input id="hoTen" type="text" placeholder="Nhập họ và tên">
 
-          <label>Đời thứ *</label>
-          <input id="doiThu" type="number" min="1" placeholder="Ví dụ: 3" />
+          <label for="doiThu">Đời thứ *</label>
+          <input id="doiThu" type="number" min="1" step="1"
+                 placeholder="Ví dụ: 3">
 
-          <label>Cha (liên kết)</label>
-          <select id="fatherSelect"><option value="">— Chọn cha (nếu là thành viên khác) —</option></select>
+          <!-- CHA -->
+          <div class="relationship">
+            <strong>👨 Thông tin cha</strong>
 
-          <label>Mẹ (liên kết)</label>
-          <select id="motherSelect"><option value="">— Chọn mẹ (nếu là thành viên khác) —</option></select>
+            <label for="fatherSelect">Chọn hồ sơ người cha đã có</label>
+            <select id="fatherSelect">
+              <option value="">— Chưa liên kết hồ sơ cha —</option>
+            </select>
 
-          <label>Ngày Tháng Năm sinh</label>
-          <input id="ngaysinh" type="number" placeholder="ngày sinh (ví dụ:01)"/>
-          <input id="thangsinh" type="number" placeholder="tháng sinh (ví dụ: 01)"/>
-          <input id="namsinh" type="number" placeholder="năm sinh (ví dụ:1945)" />
+            <label for="fatherName">Hoặc nhập tên cha trực tiếp</label>
+            <input id="fatherName" type="text"
+                   placeholder="Nhập tên cha nếu chưa có hồ sơ">
 
-          <label>Ngày Tháng Năm mất</label>
-          <input id="ngaymat" type="number" placeholder="ngày mất (nếu có)"/>
-          <input id="thangmat" type="nuber" placeholder="tháng mất (nếu có)"/>
-          <input id="nammat" type="number" placeholder="năm mất (nếu có)" />
+            <div class="hint">
+              Nếu chọn hồ sơ cha, hệ thống sẽ dùng liên kết đó để xây dựng cây.
+              Nếu chỉ nhập tên, tên sẽ được lưu và hiển thị nhưng chưa tạo được
+              liên kết hồ sơ.
+            </div>
+          </div>
 
-          <label>Công việc</label>
-          <textarea id="congviec"placeholder="Công việc..."></textarea>
-          <label>Ghi chú</label>
+          <!-- MẸ -->
+          <div class="relationship">
+            <strong>👩 Thông tin mẹ</strong>
+
+            <label for="motherSelect">Chọn hồ sơ người mẹ đã có</label>
+            <select id="motherSelect">
+              <option value="">— Chưa liên kết hồ sơ mẹ —</option>
+            </select>
+
+            <label for="motherName">Hoặc nhập tên mẹ trực tiếp</label>
+            <input id="motherName" type="text"
+                   placeholder="Nhập tên mẹ nếu chưa có hồ sơ">
+
+            <div class="hint">
+              Có thể liên kết cả cha và mẹ. Con sẽ được đặt dưới gia đình
+              của cha mẹ khi các hồ sơ được liên kết.
+            </div>
+          </div>
+
+          <!-- VỢ / CHỒNG -->
+          <div class="relationship">
+            <strong>💍 Thông tin vợ/chồng</strong>
+
+            <label for="spouseSelect">Chọn hồ sơ vợ/chồng đã có</label>
+            <select id="spouseSelect">
+              <option value="">— Chưa liên kết hồ sơ vợ/chồng —</option>
+            </select>
+
+            <label for="spouseName">Hoặc nhập tên vợ/chồng trực tiếp</label>
+            <input id="spouseName" type="text"
+                   placeholder="Nhập tên nếu chưa có hồ sơ">
+
+            <div class="hint">
+              Chọn hồ sơ có sẵn để hai người hiển thị cạnh nhau trên cây.
+              Nếu nhập tên trực tiếp, tên sẽ hiển thị bên cạnh nhưng chưa
+              được liên kết với hồ sơ riêng.
+            </div>
+          </div>
+
+          <h3>Ngày tháng năm sinh</h3>
+          <div class="pair-fields">
+            <div>
+              <label for="ngaysinh">Ngày sinh</label>
+              <input id="ngaysinh" type="number" min="1" max="31"
+                     placeholder="Ngày">
+            </div>
+            <div>
+              <label for="thangsinh">Tháng sinh</label>
+              <input id="thangsinh" type="number" min="1" max="12"
+                     placeholder="Tháng">
+            </div>
+          </div>
+          <label for="namsinh">Năm sinh</label>
+          <input id="namsinh" type="number" min="1000" max="9999"
+                 placeholder="Ví dụ: 1945">
+
+          <h3>Ngày tháng năm mất</h3>
+          <div class="pair-fields">
+            <div>
+              <label for="ngaymat">Ngày mất</label>
+              <input id="ngaymat" type="number" min="1" max="31"
+                     placeholder="Ngày">
+            </div>
+            <div>
+              <label for="thangmat">Tháng mất</label>
+              <input id="thangmat" type="number" min="1" max="12"
+                     placeholder="Tháng">
+            </div>
+          </div>
+          <label for="nammat">Năm mất</label>
+          <input id="nammat" type="number" min="1000" max="9999"
+                 placeholder="Năm mất nếu có">
+
+          <label for="congviec">Công việc</label>
+          <textarea id="congviec" placeholder="Công việc..."></textarea>
+
+          <label for="ghiChu">Ghi chú</label>
           <textarea id="ghiChu" placeholder="Ghi chú thêm..."></textarea>
 
           <div class="row">
-            <button id="saveBtn">💾 Lưu</button>
+            <button id="saveBtn">💾 Lưu thành viên</button>
             <button id="resetBtn" class="ghost">Làm mới</button>
-            <button id="clearAllBtn" class="ghost" title="Xóa toàn bộ dữ liệu (không thể hoàn tác)">Xóa toàn bộ</button>
-            <div style="margin-left:auto" id="statusBadge" class="badge" style="display:none"></div>
+            <span id="statusBadge" class="badge"></span>
           </div>
 
-          <hr />
+          <hr style="border:0;border-top:1px solid #e5eaf1;margin:18px 0">
+
+          <h3>Sao lưu và khôi phục dữ liệu</h3>
+          <div class="toolbar">
+            <button id="exportBtn" class="ghost">Xuất dữ liệu JSON</button>
+            <label for="importFile" class="ghost"
+                   style="margin:0;padding:8px 10px;border-radius:8px;
+                          border:1px solid #cfe1fb;background:#eef6ff;
+                          color:#0066cc;cursor:pointer">
+              Nhập dữ liệu JSON
+            </label>
+            <input id="importFile" type="file" accept=".json,application/json"
+                   hidden>
+            <button id="clearAllBtn" class="warn">Xóa toàn bộ</button>
+          </div>
+
+          <div class="hint">
+            Dữ liệu được lưu trong trình duyệt. Hãy xuất file JSON để sao lưu
+            trước khi xóa dữ liệu hoặc thay đổi lớn.
+          </div>
+        </section>
+
+        <!-- CÂY GIA PHẢ, KHÔNG CÓ DANH SÁCH THÀNH VIÊN -->
+        <section>
+          <h2>🌳 Cây quan hệ gia đình</h2>
+
+          <div class="hint">
+            Vợ/chồng được hiển thị cạnh nhau khi đã liên kết hồ sơ.
+            Con cái nằm phía dưới gia đình cha mẹ. Dùng nút Sửa hoặc Xóa
+            ngay trên từng hồ sơ để quản lý thành viên.
+          </div>
 
           <div class="toolbar">
-            <input id="searchInput" class="search" placeholder="Tìm theo tên, năm, hoặc ghi chú..." />
-            <select id="filterGeneration" class="small">
-              <option value="">Tất cả đời</option>
-            </select>
-            <select id="sortSelect" class="small">
-              <option value="name">Sắp xếp: Tên (A→Z)</option>
-              <option value="doi-asc">Đời (tăng dần)</option>
-              <option value="doi-desc">Đời (giảm dần)</option>
-              <option value="born-asc">Năm sinh (tăng dần)</option>
-              <option value="born-desc">Năm sinh (giảm dần)</option>
-            </select>
-            <button id="exportBtn" class="small ghost">Xuất dữ liệu</button>
-            <label for="importFile" class="small ghost" style="cursor:pointer;margin:0">Nhập dữ liệu</label>
-            <input id="importFile" type="file" accept="application/json" style="display:none" />
+            <input id="treeSearch" type="text"
+                   placeholder="Tìm tên trên cây gia phả...">
+            <button id="clearSearchBtn" class="ghost">Bỏ tìm</button>
           </div>
 
-          <div class="list" id="danhSach"></div>
-        </div>
-
-        <!-- Right: Tree / Preview -->
-        <div>
-          <h3>Cây quan hệ</h3>
-          <div class="note">Mặc định hiển thị toàn bộ. Chọn một thành viên trong danh sách để căn giữa trong cây.</div>
-          <div id="treeWrap" class="tree card" style="padding:12px;margin-top:8px;max-height:640px;overflow:auto"></div>
-
-          <h3 style="margin-top:12px">Hướng dẫn ngắn</h3>
-          <div class="note">
-            - Mỗi thành viên có ID duy nhất; bạn có thể Sửa, Xóa.<br>
-            - Cha/Mẹ có thể liên kết tới thành viên khác (dropdown). Nếu cha/mẹ không có trong danh sách, bỏ trống và ghi tên trong ghi chú.<br>
-            - Dữ liệu lưu trong localStorage; dùng "Xuất dữ liệu" để sao lưu và "Nhập dữ liệu" để phục hồi/chia sẻ.<br>
-            - "Xóa toàn bộ" sẽ xóa dữ liệu cục bộ (hệ thống sẽ hỏi xác nhận).
-          </div>
-        </div>
+          <div id="treeWrap" class="tree" aria-live="polite"></div>
+        </section>
       </div>
 
-      <footer> Tạo bởi Giàng A Pao </footer>
+      <footer>Tạo bởi Giàng A Pao</footer>
     </div>
   </div>
 
   <script>
-    // Giữ dữ liệu trong localStorage key
+    "use strict";
+
+    // Giữ nguyên khóa lưu trữ của bản gốc để đọc dữ liệu cũ.
     const STORAGE_KEY = "giapha_v2";
-    // Giữ danh sách vào biến
     let members = [];
+    let statusTimer = null;
 
-    // Helper: tạo id an toàn
-    function genId() {
-      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-      return Date.now().toString(36) + Math.random().toString(36).slice(2,9);
-    }
-
-    // Lấy element
     const el = id => document.getElementById(id);
 
-    // Load / Save
+    function genId() {
+      if (window.crypto && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+      return Date.now().toString(36) +
+        Math.random().toString(36).slice(2, 10);
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
     function loadData() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        members = raw ? JSON.parse(raw) : [];
-      } catch (e) {
-        console.error("Không thể đọc dữ liệu:", e);
+        const parsed = raw ? JSON.parse(raw) : [];
+        members = Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        console.error("Không thể đọc dữ liệu:", error);
         members = [];
+        alert("Không thể đọc dữ liệu gia phả trong trình duyệt.");
       }
+
+      // Bổ sung các trường mới cho hồ sơ cũ mà không xóa trường cũ.
+      members = members.map(member => ({
+        ...member,
+        fatherId: member.fatherId || null,
+        motherId: member.motherId || null,
+        spouseId: member.spouseId || null,
+        fatherName: member.fatherName || "",
+        motherName: member.motherName || "",
+        spouseName: member.spouseName || ""
+      }));
     }
+
     function saveData() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
-      flashStatus("Đã lưu");
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
+        flashStatus("Đã lưu dữ liệu");
+      } catch (error) {
+        console.error(error);
+        alert("Không thể lưu dữ liệu. Có thể bộ nhớ trình duyệt đã đầy.");
+      }
     }
 
-    // Flash status nhỏ
-    let statusTimer = null;
-    function flashStatus(text="Đã lưu", ms=1200) {
-      const b = el("statusBadge");
-      b.style.display = "inline-block";
-      b.textContent = text;
+    function flashStatus(message, duration = 1600) {
+      const badge = el("statusBadge");
+      badge.textContent = message;
+      badge.style.display = "inline-block";
+
       if (statusTimer) clearTimeout(statusTimer);
-      statusTimer = setTimeout(()=> b.style.display="none", ms);
-    }
-
-    // Validation đơn giản
-    function validateForm(data) {
-      const errs = [];
-      if (!data.hoTen || !data.hoTen.trim()) errs.push("Họ và tên là bắt buộc.");
-      if (!data.doiThu || isNaN(+data.doiThu) || +data.doiThu < 1) errs.push("Đời thứ phải là số nguyên >= 1.");
-      if (data.namSinh && (isNaN(+data.namSinh) || +data.namSinh < 1000 || +data.namSinh > 9999)) errs.push("Năm sinh không hợp lệ.");
-      if (data.namMat && (isNaN(+data.namMat) || +data.namMat < 1000 || +data.namMat > 9999)) errs.push("Năm mất không hợp lệ.");
-      // Không cho tự làm cha/mẹ của chính mình
-      if (data.id && (data.fatherId === data.id || data.motherId === data.id)) errs.push("Không thể đặt chính mình làm cha hoặc mẹ.");
-      return errs;
-    }
-
-    // Ghi form -> object
-    
-function getFormData() {
-  return {
-    id: el("memberId").value || null,
-    hoTen: el("hoTen").value.trim(),
-    doiThu: el("doiThu").value
-      ? Number(el("doiThu").value)
-      : null,
-
-    fatherId: el("fatherSelect").value || null,
-    motherId: el("motherSelect").value || null,
-
-    ngaySinh: el("ngaysinh").value
-      ? Number(el("ngaysinh").value) : null,
-    thangSinh: el("thangsinh").value
-      ? Number(el("thangsinh").value) : null,
-    namSinh: el("namsinh").value
-      ? Number(el("namsinh").value) : null,
-
-    ngayMat: el("ngaymat").value
-      ? Number(el("ngaymat").value) : null,
-    thangMat: el("thangmat").value
-      ? Number(el("thangmat").value) : null,
-    namMat: el("nammat").value
-      ? Number(el("nammat").value) : null,
-      
-    congviec: el("congviec").value.trim(),
-    ghiChu: el("ghiChu").value.trim()
-      };
-    }
-
-    // Gán form từ object   
-function setFormData(m = {}) {
-  el("memberId").value = m.id || "";
-  el("hoTen").value = m.hoTen || "";
-  el("doiThu").value = m.doiThu ?? "";
-
-  el("fatherSelect").value = m.fatherId || "";
-  el("motherSelect").value = m.motherId || "";
-
-  el("ngaysinh").value = m.ngaySinh ?? "";
-  el("thangsinh").value = m.thangSinh ?? "";
-  el("namsinh").value = m.namSinh ?? "";
-
-  el("ngaymat").value = m.ngayMat ?? "";
-  el("thangmat").value = m.thangMat ?? "";
-  el("nammat").value = m.namMat ?? "";
-
-  el("congviec").value = m.congviec || "";
-  el("ghiChu").value = m.ghiChu || "";
-
-  el("formTitle").textContent =
-    m.id ? "Chỉnh sửa thành viên" : "Thêm thành viên mới";
-}
-    // Clear form
-    function clearForm() {
-      setFormData({}); // reset
-      el("formError").style.display = "none";
-      el("formError").textContent = "";
-    }
-
-    // Add or update
-    function saveMember() {
-      const data = getFormData();
-      const errs = validateForm(data);
-      if (errs.length) {
-        el("formError").style.display = "block";
-        el("formError").textContent = errs.join(" ");
-        return;
-      }
-      el("formError").style.display = "none";
-
-      if (data.id) {
-        // cập nhật
-        const idx = members.findIndex(m => m.id === data.id);
-        if (idx === -1) {
-          alert("Không tìm thấy thành viên để cập nhật.");
-          return;
-        }
-        // preserve createdAt
-        data.updatedAt = new Date().toISOString();
-        data.createdAt = members[idx].createdAt || data.createdAt || new Date().toISOString();
-        members[idx] = data;
-      } else {
-        // thêm mới
-        data.id = genId();
-        data.createdAt = new Date().toISOString();
-        data.updatedAt = data.createdAt;
-        members.push(data);
-      }
-      saveData();
-      renderAll();
-      clearForm();
-    }
-
-    // Delete
-    function deleteMember(id) {
-      if (!confirm("Bạn chắc chắn muốn xóa thành viên này? Hành động không thể hoàn tác.")) return;
-      // Khi xóa, ta sẽ giữ các bản con (children) nhưng bỏ liên kết cha/mẹ nếu trỏ tới id này
-      members = members.filter(m => m.id !== id);
-      members.forEach(m => {
-        if (m.fatherId === id) m.fatherId = null;
-        if (m.motherId === id) m.motherId = null;
-      });
-      saveData();
-      renderAll();
-    }
-
-    // Edit: load member vào form
-    function editMember(id) {
-      const m = members.find(x => x.id === id);
-      if (!m) return;
-      setFormData(m);
-      // scroll up to form
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
-
-    // Populate parent selects
-    function populateParentSelects() {
-      const father = el("fatherSelect"), mother = el("motherSelect");
-      const prevFather = father.value;
-      const prevMother = mother.value;
-      father.innerHTML = '<option value="">— Chọn cha (nếu là thành viên khác) —</option>';
-      mother.innerHTML = '<option value="">— Chọn mẹ (nếu là thành viên khác) —</option>';
-      const sorted = [...members].sort((a,b)=> a.hoTen.localeCompare(b.hoTen));
-      sorted.forEach(m => {
-        const opt1 = document.createElement("option");
-        opt1.value = m.id; opt1.textContent = `${m.hoTen}${m.namSinh ? " ("+m.namSinh+")": ""}`;
-        father.appendChild(opt1);
-        const opt2 = opt1.cloneNode(true);
-        mother.appendChild(opt2);
-      });
-      // restore selection where possible
-      if (sorted.some(s=>s.id===prevFather)) father.value = prevFather;
-      if (sorted.some(s=>s.id===prevMother)) mother.value = prevMother;
-    }
-
-    // Render danh sách theo filter/search/sort
-    function renderList() {
-      const container = el("danhSach");
-      container.innerHTML = "";
-      let results = [...members];
-
-      // filter generation
-      const genFilter = el("filterGeneration").value;
-      if (genFilter) results = results.filter(r => String(r.doiThu) === genFilter);
-
-      // search
-      const q = el("searchInput").value.trim().toLowerCase();
-      if (q) {
-        results = results.filter(m => {
-          return (m.hoTen && m.hoTen.toLowerCase().includes(q)) ||
-                 (m.ghiChu && m.ghiChu.toLowerCase().includes(q)) ||
-                 (m.namSinh && String(m.namSinh).includes(q)) ||
-                 (m.namMat && String(m.namMat).includes(q));
-        });
-      }
-
-      // sort
-      const sort = el("sortSelect").value;
-      results.sort((a,b)=> {
-        if (sort === "name") return a.hoTen.localeCompare(b.hoTen);
-        if (sort === "doi-asc") return (+a.doiThu||0) - (+b.doiThu||0);
-        if (sort === "doi-desc") return (+b.doiThu||0) - (+a.doiThu||0);
-        if (sort === "born-asc") return (+a.namSinh||9999) - (+b.namSinh||9999);
-        if (sort === "born-desc") return (+b.namSinh||9999) - (+a.namSinh||9999);
-        return 0;
-      });
-
-      if (!results.length) {
-        container.innerHTML = '<div class="note">Chưa có thành viên phù hợp.</div>';
-        return;
-      }
-
-      results.forEach(m => {
-        const div = document.createElement("div");
-        div.className = "member";
-        const left = document.createElement("div");
-        const title = document.createElement("div");
-        title.innerHTML = `<b>${m.hoTen}</b> <span class="meta"> (Đời ${m.doiThu || "?"})</span>`;
-        const meta = document.createElement("div");
-        meta.className = "meta";
-        let details = "";
-        details += m.fatherId ? `Cha: ${getNameById(m.fatherId)} • ` : "";
-        details += m.motherId ? `Mẹ: ${getNameById(m.motherId)} • ` : "";
-        if (m.namSinh) details += `Sinh: ${m.namSinh} `;
-        if (m.namMat) details += `- Mất: ${m.namMat} `;
-        if (m.ghiChu) details += `<div style="margin-top:6px"><i>${m.ghiChu}</i></div>`;
-        meta.innerHTML = details;
-        left.appendChild(title);
-        left.appendChild(meta);
-
-        const right = document.createElement("div");
-        right.className = "actions";
-        // Edit
-        const btnEdit = document.createElement("button");
-        btnEdit.className = "ghost";
-        btnEdit.textContent = "Sửa";
-        btnEdit.onclick = ()=> editMember(m.id);
-        // Center in tree
-        const btnCenter = document.createElement("button");
-        btnCenter.className = "ghost";
-        btnCenter.textContent = "Tô sáng";
-        btnCenter.onclick = ()=> renderTree(m.id);
-        // Delete
-        const btnDel = document.createElement("button");
-        btnDel.className = "warn";
-        btnDel.textContent = "Xóa";
-        btnDel.onclick = ()=> deleteMember(m.id);
-
-        right.appendChild(btnEdit);
-        right.appendChild(btnCenter);
-        right.appendChild(btnDel);
-
-        div.appendChild(left);
-        div.appendChild(right);
-        container.appendChild(div);
-      });
+      statusTimer = setTimeout(() => {
+        badge.style.display = "none";
+      }, duration);
     }
 
     function getNameById(id) {
-      const m = members.find(x=>x.id===id);
-      return m ? m.hoTen : "(không tồn tại)";
+      const member = members.find(item => item.id === id);
+      return member ? member.hoTen : "";
     }
 
-    // Build tree: nhóm theo cha/mẹ (tạo map children)
-    function buildTreeRoots() {
-      // Create id->node map
-      const map = new Map();
-      members.forEach(m => map.set(m.id, {...m, children: []}));
-      // For each member, if has fatherId or motherId, attach as child to those parents.
-      // We'll prefer father linking for tree root decisions; nodes with no parent become roots.
-      map.forEach(node=>{
-        if (node.fatherId && map.has(node.fatherId)) {
-          map.get(node.fatherId).children.push(node);
-        } else if (node.motherId && map.has(node.motherId)) {
-          map.get(node.motherId).children.push(node);
+    function getFormData() {
+      return {
+        id: el("memberId").value || null,
+        hoTen: el("hoTen").value.trim(),
+        doiThu: el("doiThu").value
+          ? Number(el("doiThu").value) : null,
+
+        fatherId: el("fatherSelect").value || null,
+        motherId: el("motherSelect").value || null,
+        spouseId: el("spouseSelect").value || null,
+
+        fatherName: el("fatherName").value.trim(),
+        motherName: el("motherName").value.trim(),
+        spouseName: el("spouseName").value.trim(),
+
+        ngaySinh: el("ngaysinh").value
+          ? Number(el("ngaysinh").value) : null,
+        thangSinh: el("thangsinh").value
+          ? Number(el("thangsinh").value) : null,
+        namSinh: el("namsinh").value
+          ? Number(el("namsinh").value) : null,
+
+        ngayMat: el("ngaymat").value
+          ? Number(el("ngaymat").value) : null,
+        thangMat: el("thangmat").value
+          ? Number(el("thangmat").value) : null,
+        namMat: el("nammat").value
+          ? Number(el("nammat").value) : null,
+
+        congviec: el("congviec").value.trim(),
+        ghiChu: el("ghiChu").value.trim()
+      };
+    }
+
+    function setFormData(member = {}) {
+      el("memberId").value = member.id || "";
+      el("hoTen").value = member.hoTen || "";
+      el("doiThu").value = member.doiThu ?? "";
+
+      el("fatherName").value = member.fatherName || "";
+      el("motherName").value = member.motherName || "";
+      el("spouseName").value = member.spouseName || "";
+
+      el("ngaysinh").value = member.ngaySinh ?? "";
+      el("thangsinh").value = member.thangSinh ?? "";
+      el("namsinh").value = member.namSinh ?? "";
+
+      el("ngaymat").value = member.ngayMat ?? "";
+      el("thangmat").value = member.thangMat ?? "";
+      el("nammat").value = member.namMat ?? "";
+
+      el("congviec").value = member.congviec || "";
+      el("ghiChu").value = member.ghiChu || "";
+
+      el("formTitle").textContent = member.id
+        ? "Chỉnh sửa thành viên"
+        : "Thêm thành viên mới";
+
+      // Các select được cập nhật sau khi nạp thành viên.
+      populateRelationshipSelects();
+      el("fatherSelect").value = member.fatherId || "";
+      el("motherSelect").value = member.motherId || "";
+      el("spouseSelect").value = member.spouseId || "";
+
+      hideError();
+    }
+
+    function clearForm() {
+      setFormData({});
+      el("fatherSelect").value = "";
+      el("motherSelect").value = "";
+      el("spouseSelect").value = "";
+      hideError();
+    }
+
+    function showError(message) {
+      const box = el("formError");
+      box.textContent = message;
+      box.hidden = false;
+    }
+
+    function hideError() {
+      const box = el("formError");
+      box.textContent = "";
+      box.hidden = true;
+    }
+
+    function validateForm(data) {
+      const errors = [];
+
+      if (!data.hoTen) {
+        errors.push("Họ và tên là bắt buộc.");
+      }
+
+      if (!Number.isInteger(data.doiThu) || data.doiThu < 1) {
+        errors.push("Đời thứ phải là số nguyên lớn hơn hoặc bằng 1.");
+      }
+
+      if (data.namSinh &&
+          (data.namSinh < 1000 || data.namSinh > 9999)) {
+        errors.push("Năm sinh không hợp lệ.");
+      }
+
+      if (data.namMat &&
+          (data.namMat < 1000 || data.namMat > 9999)) {
+        errors.push("Năm mất không hợp lệ.");
+      }
+
+      for (const field of ["ngaySinh", "ngayMat"]) {
+        if (data[field] && (data[field] < 1 || data[field] > 31)) {
+          errors.push("Ngày sinh/ngày mất phải từ 1 đến 31.");
+          break;
+        }
+      }
+
+      for (const field of ["thangSinh", "thangMat"]) {
+        if (data[field] && (data[field] < 1 || data[field] > 12)) {
+          errors.push("Tháng sinh/tháng mất phải từ 1 đến 12.");
+          break;
+        }
+      }
+
+      if (data.id) {
+        if (data.fatherId === data.id) {
+          errors.push("Không thể chọn chính mình làm cha.");
+        }
+        if (data.motherId === data.id) {
+          errors.push("Không thể chọn chính mình làm mẹ.");
+        }
+        if (data.spouseId === data.id) {
+          errors.push("Không thể chọn chính mình làm vợ/chồng.");
+        }
+      }
+
+      if (data.fatherId && data.fatherId === data.motherId) {
+        errors.push("Cha và mẹ không thể là cùng một hồ sơ.");
+      }
+
+      return errors;
+    }
+
+    // Ngăn liên kết cha/mẹ tạo vòng lặp tổ tiên.
+    function wouldCreateAncestryCycle(memberId, parentId) {
+      if (!memberId || !parentId) return false;
+      if (memberId === parentId) return true;
+
+      const seen = new Set();
+      let current = members.find(item => item.id === parentId);
+
+      while (current) {
+        if (current.id === memberId) return true;
+        if (seen.has(current.id)) return true;
+        seen.add(current.id);
+
+        const nextId = current.fatherId || current.motherId;
+        if (!nextId) break;
+        current = members.find(item => item.id === nextId);
+      }
+
+      return false;
+    }
+
+    function populateRelationshipSelects() {
+      const currentId = el("memberId").value;
+      const fields = [
+        ["fatherSelect", "— Chưa liên kết hồ sơ cha —"],
+        ["motherSelect", "— Chưa liên kết hồ sơ mẹ —"],
+        ["spouseSelect", "— Chưa liên kết hồ sơ vợ/chồng —"]
+      ];
+
+      const sorted = [...members]
+        .filter(member => member.id !== currentId)
+        .sort((a, b) =>
+          String(a.hoTen || "").localeCompare(String(b.hoTen || ""), "vi")
+        );
+
+      fields.forEach(([fieldId, placeholder]) => {
+        const select = el(fieldId);
+        const previous = select.value;
+
+        select.replaceChildren();
+        const emptyOption = document.createElement("option");
+        emptyOption.value = "";
+        emptyOption.textContent = placeholder;
+        select.appendChild(emptyOption);
+
+        sorted.forEach(member => {
+          const option = document.createElement("option");
+          option.value = member.id;
+          option.textContent =
+            `${member.hoTen || "Chưa có tên"}` +
+            `${member.namSinh ? " (" + member.namSinh + ")" : ""}`;
+          select.appendChild(option);
+        });
+
+        if (sorted.some(member => member.id === previous)) {
+          select.value = previous;
         }
       });
-      // roots: those not attached as child to any other node
-      const attached = new Set();
-      map.forEach(node=>{
-        node.children.forEach(c => attached.add(c.id));
-      });
-      const roots = [];
-      map.forEach(node=>{
-        if (!attached.has(node.id)) roots.push(node);
-      });
-      // if no roots (cycle or all linked), fallback to all nodes sorted by generation
-      if (!roots.length) {
-        const arr = [...map.values()].sort((a,b)=> (a.doiThu||0)-(b.doiThu||0));
-        return arr;
-      }
-      // sort roots by doiThu then name
-      roots.sort((a,b)=> (a.doiThu||0)-(b.doiThu||0) || a.hoTen.localeCompare(b.hoTen));
-      return roots;
     }
 
-    // Render tree: optional focusId to highlight
-    function renderTree(focusId=null) {
-      const wrap = el("treeWrap");
-      wrap.innerHTML = "";
-      if (!members.length) {
-        wrap.innerHTML = '<div class="note">Chưa có dữ liệu để hiển thị cây.</div>';
+    function saveMember() {
+      const data = getFormData();
+      const errors = validateForm(data);
+
+      if (errors.length) {
+        showError(errors.join(" "));
         return;
       }
-      const roots = buildTreeRoots();
-      // Recursive render
-      function makeNodeHTML(node, depth=0) {
-        const li = document.createElement("li");
-        li.style.marginBottom = "6px";
-        const title = document.createElement("div");
-        title.innerHTML = `<b>${node.hoTen}</b> <span class="meta"> (Đời ${node.doiThu||"?"}${node.namSinh? ", " + node.namSinh:""})</span>`;
-        if (node.id === focusId) title.style.background = "#fff9db";
-        title.style.padding = "6px"; title.style.borderRadius = "8px";
-        li.appendChild(title);
-        if (node.ghiChu) {
-          const note = document.createElement("div");
-          note.className = "meta";
-          note.style.marginTop = "6px";
-          note.innerHTML = `<i>${node.ghiChu}</i>`;
-          li.appendChild(note);
+
+      for (const parentId of [data.fatherId, data.motherId]) {
+        if (parentId && wouldCreateAncestryCycle(data.id, parentId)) {
+          showError("Liên kết cha/mẹ này có thể tạo vòng lặp trong cây gia phả.");
+          return;
         }
-        if (node.children && node.children.length) {
-          const ul = document.createElement("ul");
-          node.children.sort((a,b)=> (a.doiThu||0)-(b.doiThu||0) || a.hoTen.localeCompare(b.hoTen));
-          node.children.forEach(child => ul.appendChild(makeNodeHTML(child, depth+1)));
-          li.appendChild(ul);
-        }
-        return li;
       }
-      // Attach to wrap
-      const outer = document.createElement("div");
-      roots.forEach(r => {
-        const ul = document.createElement("ul");
-        ul.appendChild(makeNodeHTML(r));
-        outer.appendChild(ul);
-      });
-      wrap.appendChild(outer);
-      // Try to scroll to focused element highlight
-      if (focusId) {
-        const highlighted = wrap.querySelector("div[style*='background: #fff9db']");
-        if (highlighted) highlighted.scrollIntoView({behavior:"smooth", block:"center"});
+
+      const existingIndex = data.id
+        ? members.findIndex(member => member.id === data.id)
+        : -1;
+
+      if (data.id && existingIndex < 0) {
+        showError("Không tìm thấy hồ sơ cần chỉnh sửa.");
+        return;
       }
-    }
 
-    // Populate generation filter options
-    function populateGenerationFilter() {
-      const select = el("filterGeneration");
-      const gens = Array.from(new Set(members.map(m => m.doiThu).filter(Boolean))).sort((a,b)=>a-b);
-      select.innerHTML = '<option value="">Tất cả đời</option>';
-      gens.forEach(g => {
-        const o = document.createElement("option");
-        o.value = g; o.textContent = "Đời " + g;
-        select.appendChild(o);
-      });
-    }
+      const oldMember = existingIndex >= 0 ? members[existingIndex] : null;
+      const now = new Date().toISOString();
 
-    // Export JSON (download)
-    function exportJSON() {
-      const dataStr = JSON.stringify({ exportedAt: new Date().toISOString(), members }, null, 2);
-      const blob = new Blob([dataStr], {type: "application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `giapha_export_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+      if (!data.id) data.id = genId();
 
-    // Import JSON (file)
-    function importJSONFile(file) {
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        try {
-          const parsed = JSON.parse(e.target.result);
-          let incoming = null;
-          if (Array.isArray(parsed)) incoming = parsed;
-          else if (parsed.members && Array.isArray(parsed.members)) incoming = parsed.members;
-          else {
-            // maybe old format saved as object with id-indexed
-            throw new Error("Định dạng JSON không hợp lệ. Cần mảng các thành viên hoặc {members: [...]}.");
-          }
-          // Confirm: merge or replace
-          if (!confirm("Nhập dữ liệu sẽ GỘP vào dữ liệu hiện tại. Chọn Hủy để thay thế toàn bộ. Tiếp tục?")) {
-            // replace
-            members = incoming;
-          } else {
-            // merge: add those with new ids, override if same id? We'll skip duplicates by id
-            const existingIds = new Set(members.map(m=>m.id));
-            incoming.forEach(m=>{
-              if (!m.id) m.id = genId();
-              if (!existingIds.has(m.id)) members.push(m);
-            });
-          }
-          saveData();
-          renderAll();
-          alert("Nhập dữ liệu hoàn tất.");
-        } catch (err) {
-          alert("Lỗi khi đọc file: " + err.message);
+      data.createdAt = oldMember?.createdAt || now;
+      data.updatedAt = now;
+
+      if (existingIndex >= 0) {
+        members[existingIndex] = {
+          ...oldMember,
+          ...data
+        };
+      } else {
+        members.push(data);
+      }
+
+      // Duy trì liên kết vợ/chồng hai chiều.
+      // Nếu thay đổi vợ/chồng, bỏ liên kết ngược cũ khi nó trỏ về người này.
+      if (oldMember?.spouseId && oldMember.spouseId !== data.spouseId) {
+        const oldSpouse = members.find(m => m.id === oldMember.spouseId);
+        if (oldSpouse && oldSpouse.spouseId === data.id) {
+          oldSpouse.spouseId = null;
         }
-      };
-      reader.readAsText(file);
+      }
+
+      if (data.spouseId) {
+        const spouse = members.find(m => m.id === data.spouseId);
+
+        if (!spouse) {
+          showError("Không tìm thấy hồ sơ vợ/chồng đã chọn.");
+          return;
+        }
+
+        if (spouse.spouseId && spouse.spouseId !== data.id) {
+          const previousSpouse = members.find(m => m.id === spouse.spouseId);
+          if (previousSpouse && previousSpouse.spouseId === spouse.id) {
+            previousSpouse.spouseId = null;
+          }
+        }
+
+        spouse.spouseId = data.id;
+        spouse.updatedAt = now;
+      }
+
+      saveData();
+      clearForm();
+      renderAll(data.id);
     }
 
-    // Clear all data
-    function clearAll() {
-      if (!confirm("Bạn chắc chắn muốn xóa toàn bộ dữ liệu trong localStorage? Hành động không thể hoàn tác.")) return;
-      members = [];
+    function editMember(id) {
+      const member = members.find(item => item.id === id);
+      if (!member) return;
+
+      setFormData(member);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      el("hoTen").focus({ preventScroll: true });
+    }
+
+    function deleteMember(id) {
+      const member = members.find(item => item.id === id);
+      if (!member) return;
+
+      if (!confirm(
+        `Bạn có chắc muốn xóa hồ sơ "${member.hoTen}"? ` +
+        "Các hồ sơ khác sẽ được giữ lại."
+      )) return;
+
+      members = members.filter(item => item.id !== id);
+
+      members.forEach(item => {
+        if (item.fatherId === id) item.fatherId = null;
+        if (item.motherId === id) item.motherId = null;
+        if (item.spouseId === id) item.spouseId = null;
+      });
+
       saveData();
       renderAll();
     }
 
-    // Render everything
-    function renderAll(focusId=null) {
-      populateParentSelects();
-      populateGenerationFilter();
-      renderList();
+    // Xây dựng các đơn vị gia đình.
+    // Mỗi đơn vị gồm một người hoặc một cặp vợ/chồng.
+    function buildFamilyUnits() {
+      const byId = new Map(members.map(member => [member.id, member]));
+      const units = new Map();
+      const memberToUnit = new Map();
+
+      function makeUnitKey(memberId, spouseId) {
+        return [memberId, spouseId].filter(Boolean).sort().join("::");
+      }
+
+      members.forEach(member => {
+        const spouse = member.spouseId ? byId.get(member.spouseId) : null;
+
+        // Chỉ ghép hai hồ sơ nếu liên kết vợ/chồng hợp lệ.
+        const spouseIsMutual = spouse &&
+          (spouse.spouseId === member.id || !spouse.spouseId);
+
+        const partnerId = spouseIsMutual ? spouse.id : null;
+        const key = makeUnitKey(member.id, partnerId);
+
+        if (!units.has(key)) {
+          const people = [member];
+          if (partnerId && partnerId !== member.id) people.push(spouse);
+
+          people.sort((a, b) =>
+            String(a.hoTen || "").localeCompare(String(b.hoTen || ""), "vi")
+          );
+
+          units.set(key, {
+            key,
+            people,
+            children: [],
+            parentUnitKey: null
+          });
+
+          people.forEach(person => memberToUnit.set(person.id, key));
+        }
+      });
+
+      // Nếu một hồ sơ có liên kết vợ/chồng một chiều,
+      // ánh xạ thành viên về đơn vị gia đình đã được tạo.
+      members.forEach(member => {
+        if (!memberToUnit.has(member.id)) {
+          const key = makeUnitKey(member.id, null);
+          units.set(key, {
+            key,
+            people: [member],
+            children: [],
+            parentUnitKey: null
+          });
+          memberToUnit.set(member.id, key);
+        }
+      });
+
+      // Mỗi con chỉ được gắn vào một đơn vị gia đình để tránh lặp.
+      members.forEach(child => {
+        const childUnitKey = memberToUnit.get(child.id);
+        const childUnit = units.get(childUnitKey);
+        if (!childUnit) return;
+
+        const fatherUnit = child.fatherId
+          ? memberToUnit.get(child.fatherId) : null;
+        const motherUnit = child.motherId
+          ? memberToUnit.get(child.motherId) : null;
+
+        let parentUnitKey = fatherUnit || motherUnit || null;
+
+        // Không tự gắn một gia đình làm con của chính nó.
+        if (parentUnitKey === childUnitKey) parentUnitKey = null;
+
+        childUnit.parentUnitKey = parentUnitKey;
+      });
+
+      units.forEach(unit => {
+        unit.children = [];
+      });
+
+      units.forEach(unit => {
+        if (!unit.parentUnitKey) return;
+
+        const parent = units.get(unit.parentUnitKey);
+        if (parent && parent.key !== unit.key) {
+          parent.children.push(unit);
+        } else {
+          unit.parentUnitKey = null;
+        }
+      });
+
+      units.forEach(unit => {
+        unit.children.sort((a, b) => {
+          const aGen = Math.min(...a.people.map(p => Number(p.doiThu) || 9999));
+          const bGen = Math.min(...b.people.map(p => Number(p.doiThu) || 9999));
+          if (aGen !== bGen) return aGen - bGen;
+
+          return String(a.people[0]?.hoTen || "").localeCompare(
+            String(b.people[0]?.hoTen || ""), "vi"
+          );
+        });
+      });
+
+      let roots = [...units.values()].filter(unit => !unit.parentUnitKey);
+
+      // Nếu dữ liệu cũ có vòng lặp, hiển thị các đơn vị chưa được đưa vào cây
+      // ở phần cuối, thay vì để chương trình đệ quy vô hạn.
+      if (!roots.length && units.size) {
+        roots = [...units.values()];
+      }
+
+      return { units, roots, memberToUnit };
+    }
+
+    function personDetails(member) {
+      const lines = [];
+
+      if (member.doiThu) lines.push("Đời " + member.doiThu);
+
+      const birth = [
+        member.ngaySinh,
+        member.thangSinh,
+        member.namSinh
+      ].filter(value => value != null && value !== "").join("/");
+
+      const death = [
+        member.ngayMat,
+        member.thangMat,
+        member.namMat
+      ].filter(value => value != null && value !== "").join("/");
+
+      if (birth) lines.push("Sinh: " + birth);
+      if (death) lines.push("Mất: " + death);
+      if (member.congviec) lines.push("Công việc: " + member.congviec);
+
+      return lines;
+    }
+
+    function renderTree(focusId = null) {
+      const wrap = el("treeWrap");
+      wrap.replaceChildren();
+
+      if (!members.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Chưa có dữ liệu. Hãy thêm thành viên đầu tiên.";
+        wrap.appendChild(empty);
+        return;
+      }
+
+      const search = el("treeSearch").value.trim().toLocaleLowerCase("vi");
+      const { units, roots, memberToUnit } = buildFamilyUnits();
+      const rendered = new Set();
+      const focusedElements = [];
+
+      function makePersonCard(member) {
+        const card = document.createElement("div");
+        card.className = "person";
+
+        if (member.id === focusId) {
+          card.classList.add("highlight");
+          focusedElements.push(card);
+        }
+
+        const name = document.createElement("div");
+        name.className = "person-name";
+        name.textContent = member.hoTen || "(Chưa có tên)";
+        card.appendChild(name);
+
+        const details = personDetails(member);
+        if (details.length) {
+          const meta = document.createElement("div");
+          meta.className = "person-meta";
+          meta.textContent = details.join(" • ");
+          card.appendChild(meta);
+        }
+
+        const extraNames = [];
+        if (!member.fatherId && member.fatherName) {
+          extraNames.push("Cha: " + member.fatherName);
+        }
+        if (!member.motherId && member.motherName) {
+          extraNames.push("Mẹ: " + member.motherName);
+        }
+        if (!member.spouseId && member.spouseName) {
+          extraNames.push("Vợ/Chồng: " + member.spouseName);
+        }
+
+        if (extraNames.length) {
+          const direct = document.createElement("div");
+          direct.className = "person-meta";
+          direct.textContent = extraNames.join(" • ");
+          card.appendChild(direct);
+        }
+
+        if (member.ghiChu) {
+          const note = document.createElement("div");
+          note.className = "person-note";
+          note.textContent = member.ghiChu;
+          card.appendChild(note);
+        }
+
+        const actions = document.createElement("div");
+        actions.className = "person-actions";
+
+        const editButton = document.createElement("button");
+        editButton.className = "ghost small";
+        editButton.textContent = "Sửa";
+        editButton.type = "button";
+        editButton.addEventListener("click", () => editMember(member.id));
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "warn small";
+        deleteButton.textContent = "Xóa";
+        deleteButton.type = "button";
+        deleteButton.addEventListener("click", () => deleteMember(member.id));
+
+        actions.append(editButton, deleteButton);
+        card.appendChild(actions);
+
+        return card;
+      }
+
+      function renderUnit(unit, ancestors = new Set()) {
+        const li = document.createElement("li");
+        li.className = "family-unit";
+
+        // Chống đệ quy vô hạn nếu dữ liệu nhập vào có vòng lặp.
+        if (ancestors.has(unit.key) || rendered.has(unit.key)) {
+          const warning = document.createElement("div");
+          warning.className = "person-meta";
+          warning.textContent =
+            "Đơn vị gia đình này đã được hiển thị ở vị trí khác.";
+          li.appendChild(warning);
+          return li;
+        }
+
+        rendered.add(unit.key);
+
+        const nextAncestors = new Set(ancestors);
+        nextAncestors.add(unit.key);
+
+        const couple = document.createElement("div");
+        couple.className = "couple";
+
+        unit.people.forEach(member => {
+          if (!search ||
+              String(member.hoTen || "").toLocaleLowerCase("vi").includes(search)) {
+            couple.appendChild(makePersonCard(member));
+          }
+        });
+
+        // Nếu tìm kiếm không khớp tên trong cặp, vẫn hiển thị cặp đó
+        // khi một người trong gia đình có con khớp kết quả.
+        if (!couple.children.length && search) {
+          const hasMatchingDescendant = unit.children.some(child =>
+            unitContainsMatch(child, search)
+          );
+
+          if (!hasMatchingDescendant) return null;
+
+          unit.people.forEach(member => couple.appendChild(makePersonCard(member)));
+        }
+
+        li.appendChild(couple);
+
+        if (unit.children.length) {
+          const childLabel = document.createElement("div");
+          childLabel.className = "children-label";
+          childLabel.textContent = "Con cái / đời sau";
+          li.appendChild(childLabel);
+
+          const ul = document.createElement("ul");
+
+          unit.children.forEach(child => {
+            if (search && !unitContainsMatch(child, search)) return;
+
+            const childNode = renderUnit(child, nextAncestors);
+            if (childNode) ul.appendChild(childNode);
+          });
+
+          if (ul.children.length) li.appendChild(ul);
+        }
+
+        return li;
+      }
+
+      function unitContainsMatch(unit, query, seen = new Set()) {
+        if (seen.has(unit.key)) return false;
+        seen.add(unit.key);
+
+        if (unit.people.some(person =>
+          String(person.hoTen || "").toLocaleLowerCase("vi").includes(query)
+        )) return true;
+
+        return unit.children.some(child =>
+          unitContainsMatch(child, query, seen)
+        );
+      }
+
+      const rootList = document.createElement("ul");
+
+      roots.forEach(root => {
+        if (search && !unitContainsMatch(root, search)) return;
+        const node = renderUnit(root);
+        if (node) rootList.appendChild(node);
+      });
+
+      // Bảo đảm hồ sơ bị cô lập do dữ liệu cũ hoặc liên kết sai vẫn có thể thấy.
+      units.forEach(unit => {
+        if (rendered.has(unit.key)) return;
+        if (search && !unitContainsMatch(unit, search)) return;
+
+        const node = renderUnit(unit);
+        if (node) rootList.appendChild(node);
+      });
+
+      if (!rootList.children.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Không tìm thấy thành viên phù hợp.";
+        wrap.appendChild(empty);
+      } else {
+        wrap.appendChild(rootList);
+      }
+
+      if (focusId) {
+        const target = focusedElements[0];
+        if (target) {
+          setTimeout(() => {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "nearest"
+            });
+          }, 50);
+        }
+      }
+    }
+
+    function renderAll(focusId = null) {
+      populateRelationshipSelects();
       renderTree(focusId);
     }
 
-    // Events
-    el("saveBtn").addEventListener("click", ()=> saveMember());
-    el("resetBtn").addEventListener("click", ()=> clearForm());
-    el("clearAllBtn").addEventListener("click", ()=> clearAll());
-    el("exportBtn").addEventListener("click", ()=> exportJSON());
-    el("importFile").addEventListener("change", (ev)=> {
-      const file = ev.target.files[0];
+    function exportJSON() {
+      const data = {
+        exportedAt: new Date().toISOString(),
+        members
+      };
+
+      const blob = new Blob(
+        [JSON.stringify(data, null, 2)],
+        { type: "application/json;charset=utf-8" }
+      );
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download =
+        "giapha_export_" + new Date().toISOString().slice(0, 10) + ".json";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function importJSONFile(file) {
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = event => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          let incoming;
+
+          if (Array.isArray(parsed)) {
+            incoming = parsed;
+          } else if (parsed && Array.isArray(parsed.members)) {
+            incoming = parsed.members;
+          } else {
+            throw new Error(
+              "File phải là mảng thành viên hoặc đối tượng có trường members."
+            );
+          }
+
+          const replaceAll = confirm(
+            "Nhấn OK để THAY THẾ dữ liệu hiện tại bằng file nhập. " +
+            "Nhấn Hủy để GỘP hồ sơ mới vào dữ liệu hiện tại."
+          );
+
+          if (replaceAll) {
+            members = incoming.map(member => ({
+              ...member,
+              id: member.id || genId()
+            }));
+          } else {
+            const existingIds = new Set(members.map(member => member.id));
+
+            incoming.forEach(member => {
+              const copy = { ...member };
+              if (!copy.id) copy.id = genId();
+
+              if (!existingIds.has(copy.id)) {
+                members.push(copy);
+                existingIds.add(copy.id);
+              }
+            });
+          }
+
+          saveData();
+          renderAll();
+          alert("Nhập dữ liệu hoàn tất.");
+        } catch (error) {
+          alert("Không thể nhập dữ liệu: " + error.message);
+        }
+      };
+
+      reader.readAsText(file, "utf-8");
+    }
+
+    function clearAll() {
+      if (!confirm(
+        "Bạn có chắc chắn muốn xóa toàn bộ dữ liệu gia phả? " +
+        "Hãy xuất dữ liệu JSON trước nếu cần sao lưu."
+      )) return;
+
+      members = [];
+      saveData();
+      clearForm();
+      renderAll();
+    }
+
+    // Các sự kiện giao diện.
+    el("saveBtn").addEventListener("click", saveMember);
+    el("resetBtn").addEventListener("click", clearForm);
+    el("clearAllBtn").addEventListener("click", clearAll);
+    el("exportBtn").addEventListener("click", exportJSON);
+
+    el("importFile").addEventListener("change", event => {
+      const file = event.target.files[0];
       importJSONFile(file);
-      ev.target.value = "";
+      event.target.value = "";
     });
 
-    el("searchInput").addEventListener("input", ()=> renderList());
-    el("filterGeneration").addEventListener("change", ()=> renderList());
-    el("sortSelect").addEventListener("change", ()=> renderList());
+    el("treeSearch").addEventListener("input", () => renderTree());
+    el("clearSearchBtn").addEventListener("click", () => {
+      el("treeSearch").value = "";
+      renderTree();
+    });
 
-    // Keyboard: Enter to save when focus in form (except textarea)
-    Array.from(document.querySelectorAll("input")).forEach(inp => {
-      inp.addEventListener("keydown", (e)=> {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
+    // Enter lưu hồ sơ, ngoại trừ trong ô textarea.
+    document.querySelectorAll(
+      '#hoTen, #doiThu, #fatherName, #motherName, #spouseName, ' +
+      '#ngaysinh, #thangsinh, #namsinh, #ngaymat, #thangmat, #nammat'
+    ).forEach(input => {
+      input.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
           saveMember();
         }
       });
     });
 
-    // Init
+    // Khởi động ứng dụng.
     loadData();
     renderAll();
 
-    // Public helpers to be used in inline events (if any)
+    // Hỗ trợ gọi từ console khi cần kiểm tra.
     window.editMember = editMember;
     window.deleteMember = deleteMember;
     window.renderTree = renderTree;
     window.getNameById = getNameById;
   </script>
 </body>
+</html>
